@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>2048</title>
+      <link rel="stylesheet" href="style.css" />
+   </head>
+   <body>
+      <main>
+         <section id="hero">
+            <h1>2048</h1>
+            <div id="hero-right">
+               <button onclick="iniciarJuego()">Nueva Partida</button>
+               <h3><span id="puntos">9999999</span>PUNTOS</h3>
+            </div>
+         </section>
+         <section id="tablero">
+            <div id="x0y0" class="celda celda-2">2</div>
+            <div id="x1y0" class="celda celda-4">4</div>
+            <div id="x2y0" class="celda"></div>
+            <div id="x3y0" class="celda"></div>
+            <div id="x0y1" class="celda"></div>
+            <div id="x1y1" class="celda"></div>
+            <div id="x2y1" class="celda celda-8">8</div>
+            <div id="x3y1" class="celda"></div>
+            <div id="x0y2" class="celda"></div>
+            <div id="x1y2" class="celda"></div>
+            <div id="x2y2" class="celda celda-256">256</div>
+            <div id="x3y2" class="celda"></div>
+            <div id="x0y3" class="celda"></div>
+            <div id="x1y3" class="celda celda-2048">2048</div>
+            <div id="x2y3" class="celda"></div>
+            <div id="x3y3" class="celda"></div>
+         </section>
+      </main>
+      <script src="main.js"></script>
+   </body>
+</html>

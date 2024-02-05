@@ -1,0 +1,399 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,500&display=swap");
+
+* {
+   font-family: "DM Sans", sans-serif;
+   color: #eeebe6;
+}
+
+body {
+   margin: 0;
+   background-color: #50423e;
+   min-height: 100vh;
+}
+
+main {
+   min-height: 100vh;
+
+   display: flex;
+   flex-direction: column;
+   place-items: center;
+}
+
+#hero {
+   width: 800px;
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+}
+
+#hero h1 {
+   font-size: 100px;
+   margin: 20px 0;
+}
+
+#hero #hero-right {
+   display: flex;
+   flex-direction: column;
+   align-items: flex-end;
+   gap: 10px;
+}
+
+#hero #hero-right button {
+   border: 0;
+   border-radius: 5px;
+   padding: 10px 20px;
+   background-color: #bbada0;
+   font-size: 20px;
+
+   transition: all 500ms;
+}
+
+#hero #hero-right button:hover {
+   cursor: pointer;
+   background-color: #cdc1b4;
+
+   transition: all 300ms;
+}
+
+#hero #hero-right h3 {
+   font-size: 24px;
+   margin: 0;
+}
+
+#puntos {
+   margin-right: 15px;
+}
+
+#tablero {
+   height: 800px;
+   width: 800px;
+   padding: 20px;
+   border-radius: 20px;
+   box-sizing: border-box;
+
+   background-color: #bbada0;
+
+   display: grid;
+   grid-template-columns: repeat(4, 1fr);
+   grid-template-rows: repeat(4, 1fr);
+   gap: 20px;
+}
+
+.celda {
+   background-color: #cdc1b4;
+   border-radius: 12px;
+   font-size: 70px;
+   font-weight: bolder;
+
+   display: flex;
+   justify-content: center;
+   align-items: center;
+}
+
+.celda-2 {
+   background: #eee4da;
+   color: #776e65;
+}
+
+.celda-4 {
+   background: #ede0c8;
+   color: #776e65;
+}
+
+.celda-8 {
+   background: #f2b179;
+}
+
+.celda-16 {
+   background: #f59563;
+}
+
+.celda-32 {
+   background: #f67c5f;
+}
+
+.celda-64 {
+   background: #f65e3b;
+}
+
+.celda-128 {
+   font-size: 65px;
+   background: #edcf72;
+   box-shadow: 0 0 30px 10px #f3d7743d;
+}
+
+.celda-256 {
+   font-size: 65px;
+   background: #edcc61;
+   box-shadow: 0 0 30px 10px #f3d77451;
+}
+
+.celda-512 {
+   font-size: 65px;
+   background: #edc850;
+   box-shadow: 0 0 30px 10px #f3d77465;
+}
+
+.celda-1024 {
+   font-size: 60px;
+   background: #edc53f;
+   box-shadow: 0 0 30px 10px #f3d77479;
+}
+
+.celda-2048 {
+   font-size: 60px;
+   background: #edc22e;
+   box-shadow: 0 0 30px 10px #f3d7748e;
+}
+
+/***** ANIMACIONES *****/
+
+/* MOVIMIENTOS */
+.mover-celda-up-animacion {
+   animation: mover-celda-up 150ms;
+}
+
+@keyframes mover-celda-up {
+   from {
+      transform: translateY(100%);
+   }
+   to {
+      transform: translateY(0);
+   }
+}
+.mover-celda-right-animacion {
+   animation: mover-celda-right 150ms;
+}
+
+@keyframes mover-celda-right {
+   from {
+      transform: translateX(-100%);
+   }
+   to {
+      transform: translateX(0);
+   }
+}
+.mover-celda-down-animacion {
+   animation: mover-celda-down 150ms;
+}
+
+@keyframes mover-celda-down {
+   from {
+      transform: translateY(-100%);
+   }
+   to {
+      transform: translateY(0);
+   }
+}
+.mover-celda-left-animacion {
+   animation: mover-celda-left 150ms;
+}
+
+@keyframes mover-celda-left {
+   from {
+      transform: translateX(100%);
+   }
+   to {
+      transform: translateX(0);
+   }
+}
+
+/* GENERACION */
+.generar-celda-animacion {
+   animation: generar-celda 250ms;
+}
+
+@keyframes generar-celda {
+   from {
+      scale: 0;
+   }
+   to {
+      scale: 1;
+   }
+}
+
+/* FUSION & MOVIMIENTOS DE FUSION */
+.fusionar-celda-animacion {
+   animation: fusionar-celda 250ms;
+}
+
+@keyframes fusionar-celda {
+   0%, 100% {
+      scale: 1;
+   }
+   50% {
+      scale: 1.3;
+   }
+}
+
+.fusion-mover-celda-up-animacion {
+   animation: fusion-mover-celda-up 150ms;
+}
+
+@keyframes fusion-mover-celda-up {
+   to {
+      transform: translateY(-100%);
+   }
+}
+.fusion-mover-celda-right-animacion {
+   animation: fusion-mover-celda-right 150ms;
+}
+
+@keyframes fusion-mover-celda-right {
+   to {
+      transform: translateX(100%);
+   }
+}
+.fusion-mover-celda-down-animacion {
+   animation: fusion-mover-celda-down 150ms;
+}
+
+@keyframes fusion-mover-celda-down {
+   to {
+      transform: translateY(100%);
+   }
+}
+.fusion-mover-celda-left-animacion {
+   animation: fusion-mover-celda-left 150ms;
+}
+
+@keyframes fusion-mover-celda-left {
+   to {
+      transform: translateX(-100%);
+   }
+}
+
+@media (width < 900px) or (height < 1000px) {
+   #hero {
+      width: 600px;
+   }
+
+   #hero h1 {
+      font-size: 80px;
+   }
+
+   #tablero {
+      height: 600px;
+      width: 600px;
+      padding: 15px;
+      gap: 15px;
+   }
+
+   .celda {
+      font-size: 60px;
+   }
+
+   .celda-128 {
+      font-size: 55px;
+   }
+
+   .celda-256 {
+      font-size: 55px;
+   }
+
+   .celda-512 {
+      font-size: 55px;
+   }
+
+   .celda-1024 {
+      font-size: 50px;
+   }
+
+   .celda-2048 {
+      font-size: 50px;
+   }
+}
+
+@media (width < 700px) or (height < 800px) {
+   #hero {
+      width: 500px;
+   }
+
+   #hero #hero-right button {
+      padding: 8px 18px;
+   }
+
+   #hero h1 {
+      font-size: 70px;
+   }
+
+   #tablero {
+      height: 500px;
+      width: 500px;
+      padding: 10px;
+      gap: 10px;
+   }
+
+   .celda {
+      font-size: 45px;
+   }
+
+   .celda-128 {
+      font-size: 40px;
+   }
+
+   .celda-256 {
+      font-size: 40px;
+   }
+
+   .celda-512 {
+      font-size: 40px;
+   }
+
+   .celda-1024 {
+      font-size: 35px;
+   }
+
+   .celda-2048 {
+      font-size: 35px;
+   }
+}
+
+@media (width < 550px) or (height < 700px) {
+   #hero {
+      width: 400px;
+   }
+
+   #hero h1 {
+      font-size: 65px;
+   }
+
+   #hero #hero-right button {
+      font-size: 15px;
+   }
+
+   #hero #hero-right h3 {
+      font-size: 20px;
+   }
+   
+   #tablero {
+      height: 400px;
+      width: 400px;
+      padding: 10px;
+      gap: 10px;
+   }
+
+   .celda {
+      font-size: 40px;
+   }
+
+   .celda-128 {
+      font-size: 35px;
+   }
+
+   .celda-256 {
+      font-size: 35px;
+   }
+
+   .celda-512 {
+      font-size: 35px;
+   }
+
+   .celda-1024 {
+      font-size: 28px;
+   }
+
+   .celda-2048 {
+      font-size: 28px;
+   }
+}
