@@ -52,7 +52,8 @@ const calcularValorCelda = () => {
    }
 };
 
-function generarCelda() {
+async function generarCelda() {
+   await new Promise((resolve) => setTimeout(resolve, 150));
    // Si no hay celdas disponibles termina el juego.
    if (comprobarDerrota()) {
       console.log(comprobarDerrota());
