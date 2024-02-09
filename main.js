@@ -15,6 +15,9 @@ function vaciarTablero() {
          resetCelda(document.getElementById("x" + x + "y" + y));
       }
    }
+   // Establece los puntos a 0.
+   puntos = 0
+   document.getElementById("puntos").innerText = puntos;
 }
 
 function comprobarDerrota() {
@@ -72,11 +75,14 @@ async function generarCelda() {
       if (celda.innerText == "") {
          celda.innerText = valor;
          celda.classList.add("generar-celda-animacion", "celda-" + valor);
+
+         // Elimina la animación.
+         setTimeout(
+            () => celda.classList.remove("generar-celda-animacion"),
+            250
+         );
          return;
       }
-
-      // Elimina la animación.
-      setTimeout(() => celda.classList.remove("generar-celda-animacion"), 250);
    } while (true);
 }
 
@@ -85,50 +91,54 @@ function resetCelda(celda) {
    celda.innerText = "";
 }
 
-function moverCelda(celdaMover, celdaVacia, mov) {
+/*
+ *  celda     ->  Celda que se mueve.
+ *  posicion  ->  Posicion a la que se mueve.
+ *  dir       ->  Dirección a la que se mueve ("up", "right", "down", "left").
+ *  mov       ->  Numero de celdas que se mueve.
+ */
+function moverCelda(celda, posicion, dir, mov) {
    // Inserta los datos la celda que se mueve en la celda vacía.
-   celdaVacia.innerText = celdaMover.innerText;
-   celdaVacia.className = "";
-   celdaVacia.classList.add(
-      "mover-celda-" + mov + "-animacion",
-      "celda",
-      "celda-" + celdaMover.innerText
+   posicion.innerText = celda.innerText;
+   posicion.classList.add(
+      "mover-" + mov + "-" + dir + "-animacion",
+      "celda-" + celda.innerText
    );
 
-   // Elimina la animación.
+   // Elimina la animación. SI NO HAGO ESTO Y LUEGO SE AÑADE LA MISMA ANIMACIÓN EL NAVEGADOR NO LA EJECUTA.
    setTimeout(
-      () => celdaVacia.classList.remove("mover-celda-" + mov + "-animacion"),
-      250
+      () =>
+         posicion.classList.remove("mover-" + mov + "-" + dir + "-animacion"),
+      120
    );
 
    // Reset de la celda que deja libre.
-   resetCelda(celdaMover);
+   resetCelda(celda);
 }
 
-async function fusionarCeldas(celdaMover, celdaPosicionFinal, mov) {
+function fusionarCeldas(celda, posicion, mov) {
+   // PREVENCIÓN DE ERROR. Si la celda con la que se esta comparando tiene la siguiente clase. 
+   // Significa que esta en proceso de fusión con otra.
+   if (posicion.classList.contains("move-" + mov + "-to-fusion-animacion")) {
+      return;
+   }
+
    // Valor de la celda resultante.
-   const valor = celdaMover.innerText * 2;
+   const valor = celda.innerText * 2;
+
    // Movimiento de la celda antes de resetearla.
-   celdaMover.classList.add(".fusion-mover-celda-" + mov + "-animacion");
-   await new Promise((resolve) => setTimeout(resolve, 150));
-
-   // Fusiona ambas celdas.
-   celdaPosicionFinal.innerText = valor;
-   celdaPosicionFinal.className = "";
-   celdaPosicionFinal.classList.add(
-      "fusionar-celda-animacion",
-      "celda",
-      "celda-" + valor
-   );
-
-   // Elimina la animación.
-   setTimeout(
-      () => celdaPosicionFinal.classList.remove("fusionar-celda-animacion"),
-      250
-   );
+   celda.classList.add("move-" + mov + "-to-fusion-animacion");
 
    // Reset de la celda que deja libre.
-   resetCelda(celdaMover);
+   setTimeout(() => resetCelda(celda), 60);
+
+   // Fusiona ambas celdas.
+   posicion.innerText = valor;
+   posicion.className = "";
+   posicion.classList.add("fusion-celda-animacion", "celda", "celda-" + valor);
+
+   // Elimina la animación.
+   setTimeout(() => posicion.classList.remove("fusion-celda-animacion"), 250);
 
    // Actualiza la puntuación.
    puntos += valor;
@@ -140,41 +150,90 @@ async function fusionarCeldas(celdaMover, celdaPosicionFinal, mov) {
 /***************************************************************************************/
 
 /**********************
+ * EXPLICACION ALGORITMO DE MOVIMIENTO.
+ **********************
  * POR CADA MOVIMIENTO:
- * -> Primero movemos las celdas en la direccion seleccionada para evitar los espacios en blanco.
- * -> Segundo fusionamos todas las celdas que permita el movimiento.
- * -> Tercero se moverán las celdas en la direccion seleccionada para eliminar los espacios en blanco que genera la fusión.
- * -> Por último. Se generará una celda nueva, si ha sido un movimiento válido.
+ * 1 -> Movemos las celdas todo lo posible en la direccion seleccionada, para evitar los espacios en blanco.
+ *    1a -> Calculamos las celdas que se ha movido para visualizar una animación según cuanto se desplaza.
+ *    1b -> Si ha habido movimiento, generamos una espera para que terminen las animaciones y no las termine abruptamente la parte 2.
+ * 2 -> Fusionamos todas las celdas que permita el movimiento.
+ *    2a -> Si ha habido fusión, generamos una espera para que terminen las animaciones.
+ * 3 -> Se moverán las celdas en la direccion seleccionada para eliminar los espacios en blanco que genera la fusión.
+ * 4 -> Se generará una celda nueva, si ha sido un movimiento válido.
+ * 5 -> Si el movimiento no fue válido se comprobará si existe algún movimiento posible. En caso de no haber se mostrará la pantalla de derrota.
  **********************/
 
-/* Se hace en este orden el algoritmo para evitar fusionar celdas que corresponderían a otro movimiento 
-   y fusionar celdas que se encuentran separadas pero pertenecen a ese movimiento. */
-
-function moveUp() {
+async function moveUp() {
    let movimientoValido = false; // No contará como movimiento si no ha habido ninguna fusión ni desplazamiento.
+   let fusion = false; // Booleano para añadir tiempo de espera si ha habido animación de fusión.
 
-   // PRIMERA BARRIDA DE MOVIMIENTO DE CELDAS.
-   for (let i = 0; i < 3; i++) {
-      for (let y = 1; y <= 3; y++) {
-         for (let x = 0; x < 4; x++) {
-            const celda = document.getElementById("x" + x + "y" + y);
-            const celdaUp = document.getElementById("x" + x + "y" + (y - 1));
+   /*** *** PRIMERA BARRIDA DE MOVIMIENTO. *** ***/
+   for (let y = 1; y <= 3; y++) {
+      for (let x = 0; x < 4; x++) {
+         const celda = document.getElementById("x" + x + "y" + y);
 
-            // Si la celda esta vacia pasa al siguiente bucle.
-            if (celda.innerText == "" || celda.innerText == null) {
-               continue;
+         // Si la celda esta vacia pasa al siguiente bucle.
+         if (celda.innerText == "" || celda.innerText == null) {
+            continue;
+         }
+
+         // Cuenta las celdas vacías directamente seguidas de la celda.
+         let mov = 0;
+         for (let i = y - 1; i >= 0; i--) {
+            const celdaUp = document.getElementById("x" + x + "y" + i);
+            // Termina el bucle en cuanto no encuentre una celda vacía.
+            if (celdaUp.innerText != "" && celdaUp.innerText != null) {
+               break;
             }
 
-            // Si la celda de abajo esta vacía. Movemos la celda actual a la posicion inferior.
-            if (celdaUp.innerText == "" || celda.innerText == null) {
-               moverCelda(celda, celdaUp, "up");
-               movimientoValido = true;
+            // Aumenta el contador por cada celda vacía que encuentre.
+            if (celdaUp.innerText == "" || celdaUp.innerText == null) {
+               mov++;
             }
+         }
+
+         // Mueve CELDA cuando no ecuentre mas celdas vacías.
+         if (mov != 0) {
+            moverCelda(
+               celda,
+               document.getElementById("x" + x + "y" + (y - mov)),
+               "up",
+               mov
+            );
+            movimientoValido = true;
          }
       }
    }
+   // Genera una espera para terminar las animaciones de movimiento. Si ha habido movimiento.
+   if (movimientoValido) {
+      await new Promise((resolve) => setTimeout(resolve, 125));
+   }
 
-   // FUSION DE CELDAS.
+   /*** *** FUSION DE CELDAS. *** ***/
+   for (let y = 1; y <= 3; y++) {
+      for (let x = 0; x < 4; x++) {
+         const celda = document.getElementById("x" + x + "y" + y);
+         const celdaUp = document.getElementById("x" + x + "y" + (y - 1));
+
+         // IMPORTANTE para evitar fusion de nulos. Si la celda esta vacia pasa al siguiente bucle.
+         if (celda.innerText == "" || celda.innerText == null) {
+            continue;
+         }
+
+         // Si la celda actual y la celda inferior tienen el mismo valor, se fusionan las celdas.
+         if (celda.innerText == celdaUp.innerText) {
+            fusionarCeldas(celda, celdaUp, "up");
+            movimientoValido = true;
+            fusion = true;
+         }
+      }
+   }
+   // Espera para terminar animaciones de fusion.
+   if (fusion) {
+      await new Promise((resolve) => setTimeout(resolve, 65));
+   }
+
+   /*** *** SEGUNDA BARRIDA DE MOVIMIENTO. *** ***/
    for (let y = 1; y <= 3; y++) {
       for (let x = 0; x < 4; x++) {
          const celda = document.getElementById("x" + x + "y" + y);
@@ -185,66 +244,91 @@ function moveUp() {
             continue;
          }
 
-         // Si la celda actual y la celda inferior tienen el mismo valor, se fusionan las celdas.
-         if (celda.innerText == celdaUp.innerText) {
-            fusionarCeldas(celda, celdaUp);
+         // Si la celda de abajo esta vacía. Movemos la celda actual a la posicion inferior.
+         if (celdaUp.innerText == "" || celda.innerText == null) {
+            moverCelda(celda, celdaUp, "up", 1);
             movimientoValido = true;
          }
       }
    }
 
-   // SEGUNDA BARRIDA DE MOVIMIENTO DE CELDAS.
-   for (let i = 0; i < 3; i++) {
-      for (let y = 1; y <= 3; y++) {
-         for (let x = 0; x < 4; x++) {
-            const celda = document.getElementById("x" + x + "y" + y);
-            const celdaUp = document.getElementById("x" + x + "y" + (y - 1));
-
-            // Si la celda esta vacia pasa al siguiente bucle.
-            if (celda.innerText == "" || celda.innerText == null) {
-               continue;
-            }
-
-            // Si la celda de abajo esta vacía. Movemos la celda actual a la posicion inferior.
-            if (celdaUp.innerText == "" || celda.innerText == null) {
-               moverCelda(celda, celdaUp, "up");
-               movimientoValido = true;
-            }
-         }
-      }
-   }
-
-   // GENERAR CELDA
+   /*** *** GENERAR CELDA. *** ***/
    if (movimientoValido) {
       generarCelda();
    }
 }
 
-function moveRight() {
+async function moveRight() {
    let movimientoValido = false; // No contará como movimiento si no ha habido ninguna fusión ni desplazamiento.
+   let fusion = false; // Booleano para añadir tiempo de espera si ha habido animación de fusión.
 
-   // PRIMERA BARRIDA DE MOVIMIENTO DE CELDAS.
-   for (let i = 0; i < 3; i++) {
-      for (let y = 0; y < 4; y++) {
-         for (let x = 2; x >= 0; x--) {
-            const celda = document.getElementById("x" + x + "y" + y);
-            const celdaRight = document.getElementById("x" + (x + 1) + "y" + y);
+   /*** *** PRIMERA BARRIDA DE MOVIMIENTO. *** ***/
+   for (let y = 0; y < 4; y++) {
+      for (let x = 2; x >= 0; x--) {
+         const celda = document.getElementById("x" + x + "y" + y);
 
-            // Si la celda esta vacia pasa al siguiente bucle.
-            if (celda.innerText == "" || celda.innerText == null) {
-               continue;
+         // Si la celda esta vacia pasa al siguiente bucle.
+         if (celda.innerText == "" || celda.innerText == null) {
+            continue;
+         }
+
+         // Cuenta las celdas vacías directamente seguidas de la celda.
+         let mov = 0;
+         for (let i = x + 1; i < 4; i++) {
+            const celdaRight = document.getElementById("x" + i + "y" + y);
+            // Termina el bucle en cuanto no encuentre una celda vacía.
+            if (celdaRight.innerText != "" && celdaRight.innerText != null) {
+               break;
             }
 
-            // Si la celda de abajo esta vacía. Movemos la celda actual a la posicion inferior.
-            if (celdaRight.innerText == "" || celda.innerText == null) {
-               moverCelda(celda, celdaRight, "right");
-               movimientoValido = true;
+            // Aumenta el contador por cada celda vacía que encuentre.
+            if (celdaRight.innerText == "" || celdaRight.innerText == null) {
+               mov++;
             }
+         }
+
+         // Mueve CELDA cuando no ecuentre mas celdas vacías.
+         if (mov != 0) {
+            moverCelda(
+               celda,
+               document.getElementById("x" + (x + mov) + "y" + y),
+               "right",
+               mov
+            );
+            movimientoValido = true;
          }
       }
    }
+   // Genera una espera para terminar las animaciones de movimiento. Si ha habido movimiento.
+   if (movimientoValido) {
+      await new Promise((resolve) => setTimeout(resolve, 125));
+   }
 
-   // FUSION DE CELDAS.
+   /*** *** FUSION DE CELDAS. *** ***/
+   for (let y = 0; y < 4; y++) {
+      for (let x = 2; x >= 0; x--) {
+         const celda = document.getElementById("x" + x + "y" + y);
+         const celdaRight = document.getElementById("x" + (x + 1) + "y" + y);
+
+         // IMPORTANTE para evitar fusion de nulos. Si la celda esta vacia pasa al siguiente bucle.
+         if (celda.innerText == "" || celda.innerText == null) {
+            continue;
+         }
+
+         // Si la celda actual y la celda inferior tienen el mismo valor, se fusionan las celdas.
+         if (celda.innerText == celdaRight.innerText) {
+            fusionarCeldas(celda, celdaRight, "right");
+            movimientoValido = true;
+            fusion = true;
+         }
+      }
+   }
+   // Espera para terminar animaciones de fusion.
+   if (fusion) {
+      await new Promise((resolve) => setTimeout(resolve, 65));
+   }
+
+   /*** *** SEGUNDA BARRIDA DE MOVIMIENTO. *** ***/
    for (let y = 0; y < 4; y++) {
       for (let x = 2; x >= 0; x--) {
          const celda = document.getElementById("x" + x + "y" + y);
@@ -255,31 +339,10 @@ function moveRight() {
             continue;
          }
 
-         // Si la celda actual y la celda inferior tienen el mismo valor, se fusionan las celdas.
-         if (celda.innerText == celdaRight.innerText) {
-            fusionarCeldas(celda, celdaRight);
+         // Si la celda de abajo esta vacía. Movemos la celda actual a la posicion inferior.
+         if (celdaRight.innerText == "" || celdaRight.innerText == null) {
+            moverCelda(celda, celdaRight, "right", 1);
             movimientoValido = true;
-         }
-      }
-   }
-
-   // SEGUNDA BARRIDA DE MOVIMIENTO DE CELDAS.
-   for (let i = 0; i < 3; i++) {
-      for (let y = 0; y < 4; y++) {
-         for (let x = 2; x >= 0; x--) {
-            const celda = document.getElementById("x" + x + "y" + y);
-            const celdaRight = document.getElementById("x" + (x + 1) + "y" + y);
-
-            // Si la celda esta vacia pasa al siguiente bucle.
-            if (celda.innerText == "" || celda.innerText == null) {
-               continue;
-            }
-
-            // Si la celda de abajo esta vacía. Movemos la celda actual a la posicion inferior.
-            if (celdaRight.innerText == "" || celda.innerText == null) {
-               moverCelda(celda, celdaRight, "right");
-               movimientoValido = true;
-            }
          }
       }
    }
@@ -290,31 +353,77 @@ function moveRight() {
    }
 }
 
-function moveDown() {
+async function moveDown() {
    let movimientoValido = false; // No contará como movimiento si no ha habido ninguna fusión ni desplazamiento.
+   let fusion = false; // Booleano para añadir tiempo de espera si ha habido animación de fusión.
 
-   // PRIMERA BARRIDA DE MOVIMIENTO DE CELDAS.
-   for (let i = 0; i < 3; i++) {
-      for (let y = 2; y >= 0; y--) {
-         for (let x = 0; x < 4; x++) {
-            const celda = document.getElementById("x" + x + "y" + y);
-            const celdaDown = document.getElementById("x" + x + "y" + (y + 1));
+   /*** *** PRIMERA BARRIDA DE MOVIMIENTO. *** ***/
+   for (let y = 2; y >= 0; y--) {
+      for (let x = 0; x < 4; x++) {
+         const celda = document.getElementById("x" + x + "y" + y);
 
-            // Si la celda esta vacia pasa al siguiente bucle.
-            if (celda.innerText == "" || celda.innerText == null) {
-               continue;
+         // Si la celda esta vacia pasa a la siguiente celda.
+         if (celda.innerText == "" || celda.innerText == null) {
+            continue;
+         }
+
+         // Cuenta las celdas vacías directamente seguidas de la celda.
+         let mov = 0;
+         for (let i = y + 1; i < 4; i++) {
+            const celdaDown = document.getElementById("x" + x + "y" + i);
+            // Termina el bucle en cuanto no encuentre una celda vacía.
+            if (celdaDown.innerText != "" && celdaDown.innerText != null) {
+               break;
             }
 
-            // Si la celda de abajo esta vacía. Movemos la celda actual a la posicion inferior.
-            if (celdaDown.innerText == "" || celda.innerText == null) {
-               moverCelda(celda, celdaDown, "down");
-               movimientoValido = true;
+            // Aumenta el contador por cada celda vacía que encuentre.
+            if (celdaDown.innerText == "" || celdaDown.innerText == null) {
+               mov++;
             }
+         }
+
+         // Mueve la celda cuando no ecuentre mas celdas vacías.
+         if (mov != 0) {
+            moverCelda(
+               celda,
+               document.getElementById("x" + x + "y" + (y + mov)),
+               "down",
+               mov
+            );
+            movimientoValido = true;
          }
       }
    }
+   // Genera una espera para terminar las animaciones de movimiento. Si ha habido movimiento.
+   if (movimientoValido) {
+      await new Promise((resolve) => setTimeout(resolve, 125));
+   }
 
-   // FUSION DE CELDAS.
+   /*** *** FUSION DE CELDAS. *** ***/
+   for (let y = 2; y >= 0; y--) {
+      for (let x = 0; x < 4; x++) {
+         const celda = document.getElementById("x" + x + "y" + y);
+         const celdaDown = document.getElementById("x" + x + "y" + (y + 1));
+
+         // IMPORTANTE para evitar fusion de nulos. Si la celda esta vacia pasa al siguiente bucle.
+         if (celda.innerText == "" || celda.innerText == null) {
+            continue;
+         }
+
+         // Si la celda actual y la celda inferior tienen el mismo valor, se fusionan las celdas.
+         if (celda.innerText == celdaDown.innerText) {
+            fusionarCeldas(celda, celdaDown, "down");
+            movimientoValido = true;
+            fusion = true;
+         }
+      }
+   }
+   // Espera para terminar animaciones de fusion.
+   if (fusion) {
+      await new Promise((resolve) => setTimeout(resolve, 65));
+   }
+
+   /*** *** SEGUNDA BARRIDA DE MOVIMIENTO. *** ***/
    for (let y = 2; y >= 0; y--) {
       for (let x = 0; x < 4; x++) {
          const celda = document.getElementById("x" + x + "y" + y);
@@ -325,66 +434,67 @@ function moveDown() {
             continue;
          }
 
-         // Si la celda actual y la celda inferior tienen el mismo valor, se fusionan las celdas.
-         if (celda.innerText == celdaDown.innerText) {
-            fusionarCeldas(celda, celdaDown);
+         // Si la celda de abajo esta vacía. Movemos la celda actual a la posicion inferior.
+         if (celdaDown.innerText == "" || celdaDown.innerText == null) {
+            moverCelda(celda, celdaDown, "down", 1);
             movimientoValido = true;
          }
       }
    }
 
-   // SEGUNDA BARRIDA DE MOVIMIENTO DE CELDAS.
-   for (let i = 0; i < 3; i++) {
-      for (let y = 2; y >= 0; y--) {
-         for (let x = 0; x < 4; x++) {
-            const celda = document.getElementById("x" + x + "y" + y);
-            const celdaDown = document.getElementById("x" + x + "y" + (y + 1));
-
-            // Si la celda esta vacia pasa al siguiente bucle.
-            if (celda.innerText == "" || celda.innerText == null) {
-               continue;
-            }
-
-            // Si la celda de abajo esta vacía. Movemos la celda actual a la posicion inferior.
-            if (celdaDown.innerText == "" || celda.innerText == null) {
-               moverCelda(celda, celdaDown, "down");
-               movimientoValido = true;
-            }
-         }
-      }
-   }
-
-   // GENERAR CELDA
+   /*** *** GENERAR CELDA. *** ***/
    if (movimientoValido) {
       generarCelda();
    }
 }
 
-function moveLeft() {
+async function moveLeft() {
    let movimientoValido = false; // No contará como movimiento si no ha habido ninguna fusión ni desplazamiento.
+   let fusion = false; // Booleano para añadir tiempo de espera si ha habido animación de fusión.
 
-   // PRIMERA BARRIDA DE MOVIMIENTO DE CELDAS.
-   for (let i = 0; i < 3; i++) {
-      for (let y = 0; y < 4; y++) {
-         for (let x = 1; x <= 3; x++) {
-            const celda = document.getElementById("x" + x + "y" + y);
-            const celdaLeft = document.getElementById("x" + (x - 1) + "y" + y);
+   /*** *** PRIMERA BARRIDA DE MOVIMIENTO. *** ***/
+   for (let y = 0; y < 4; y++) {
+      for (let x = 1; x <= 3; x++) {
+         const celda = document.getElementById("x" + x + "y" + y);
 
-            // Si la celda esta vacia pasa al siguiente bucle.
-            if (celda.innerText == "" || celda.innerText == null) {
-               continue;
+         // Si la celda esta vacia pasa al siguiente bucle.
+         if (celda.innerText == "" || celda.innerText == null) {
+            continue;
+         }
+
+         // Cuenta las celdas vacías directamente seguidas de la celda.
+         let mov = 0;
+         for (let i = x - 1; i >= 0; i--) {
+            const celdaLeft = document.getElementById("x" + i + "y" + y);
+            // Termina el bucle en cuanto no encuentre una celda vacía.
+            if (celdaLeft.innerText != "" && celdaLeft.innerText != null) {
+               break;
             }
 
-            // Si la celda de abajo esta vacía. Movemos la celda actual a la posicion inferior.
-            if (celdaLeft.innerText == "" || celda.innerText == null) {
-               moverCelda(celda, celdaLeft, "left");
-               movimientoValido = true;
+            // Aumenta el contador por cada celda vacía que encuentre.
+            if (celdaLeft.innerText == "" || celdaLeft.innerText == null) {
+               mov++;
             }
+         }
+
+         // Mueve CELDA cuando no ecuentre mas celdas vacías.
+         if (mov != 0) {
+            moverCelda(
+               celda,
+               document.getElementById("x" + (x - mov) + "y" + y),
+               "left",
+               mov
+            );
+            movimientoValido = true;
          }
       }
    }
+   // Genera una espera para terminar las animaciones de movimiento. Si ha habido movimiento.
+   if (movimientoValido) {
+      await new Promise((resolve) => setTimeout(resolve, 125));
+   }
 
-   // FUSION DE CELDAS.
+   /*** *** FUSION DE CELDAS. *** ***/
    for (let y = 0; y < 4; y++) {
       for (let x = 1; x <= 3; x++) {
          const celda = document.getElementById("x" + x + "y" + y);
@@ -397,29 +507,32 @@ function moveLeft() {
 
          // Si la celda actual y la celda inferior tienen el mismo valor, se fusionan las celdas.
          if (celda.innerText == celdaLeft.innerText) {
-            fusionarCeldas(celda, celdaLeft);
+            fusionarCeldas(celda, celdaLeft, "left");
             movimientoValido = true;
+            fusion = true;
          }
       }
    }
+   /*** Espera para terminar animaciones de fusion. ***/
+   if (fusion) {
+      await new Promise((resolve) => setTimeout(resolve, 65));
+   }
 
-   // SEGUNDA BARRIDA DE MOVIMIENTO DE CELDAS.
-   for (let i = 0; i < 3; i++) {
-      for (let y = 0; y < 4; y++) {
-         for (let x = 1; x <= 3; x++) {
-            const celda = document.getElementById("x" + x + "y" + y);
-            const celdaLeft = document.getElementById("x" + (x - 1) + "y" + y);
+   /*** *** SEGUNDA BARRIDA DE MOVIMIENTO. *** ***/
+   for (let y = 0; y < 4; y++) {
+      for (let x = 1; x <= 3; x++) {
+         const celda = document.getElementById("x" + x + "y" + y);
+         const celdaLeft = document.getElementById("x" + (x - 1) + "y" + y);
 
-            // Si la celda esta vacia pasa al siguiente bucle.
-            if (celda.innerText == "" || celda.innerText == null) {
-               continue;
-            }
+         // Si la celda esta vacia pasa al siguiente bucle.
+         if (celda.innerText == "" || celda.innerText == null) {
+            continue;
+         }
 
-            // Si la celda de abajo esta vacía. Movemos la celda actual a la posicion inferior.
-            if (celdaLeft.innerText == "" || celda.innerText == null) {
-               moverCelda(celda, celdaLeft, "left");
-               movimientoValido = true;
-            }
+         // Si la celda de abajo esta vacía. Movemos la celda actual a la posicion inferior.
+         if (celdaLeft.innerText == "" || celda.innerText == null) {
+            moverCelda(celda, celdaLeft, "left", 1);
+            movimientoValido = true;
          }
       }
    }

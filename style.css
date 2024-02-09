@@ -146,52 +146,146 @@ main {
    box-shadow: 0 0 30px 10px #f3d7748e;
 }
 
-/***** ANIMACIONES *****/
+/*** *** ANIMACIONES *** ***/
 
-/* MOVIMIENTOS */
-.mover-celda-up-animacion {
-   animation: mover-celda-up 150ms;
+/* MOVE UP */
+
+.mover-1-up-animacion {
+   animation: mover-1-up 120ms;
 }
-
-@keyframes mover-celda-up {
+@keyframes mover-1-up {
    from {
-      transform: translateY(100%);
+      transform: translateY(111%);
    }
    to {
       transform: translateY(0);
    }
 }
-.mover-celda-right-animacion {
-   animation: mover-celda-right 150ms;
+.mover-2-up-animacion {
+   animation: mover-2-up 120ms;
+}
+@keyframes mover-2-up {
+   from {
+      transform: translateY(222%);
+   }
+   to {
+      transform: translateY(0);
+   }
+}
+.mover-3-up-animacion {
+   animation: mover-3-up 120ms;
+}
+@keyframes mover-3-up {
+   from {
+      transform: translateY(333%);
+   }
+   to {
+      transform: translateY(0);
+   }
 }
 
-@keyframes mover-celda-right {
+/* MOVE RIGHT */
+
+.mover-1-right-animacion {
+   animation: mover-1-right 120ms;
+}
+@keyframes mover-1-right {
    from {
-      transform: translateX(-100%);
+      transform: translateX(-111%);
    }
    to {
       transform: translateX(0);
    }
 }
-.mover-celda-down-animacion {
-   animation: mover-celda-down 150ms;
+.mover-2-right-animacion {
+   animation: mover-2-right 120ms;
+}
+@keyframes mover-2-right {
+   from {
+      transform: translateX(-222%);
+   }
+   to {
+      transform: translateX(0);
+   }
+}
+.mover-3-right-animacion {
+   animation: mover-3-right 120ms;
+}
+@keyframes mover-3-right {
+   from {
+      transform: translateX(-333%);
+   }
+   to {
+      transform: translateX(0);
+   }
 }
 
-@keyframes mover-celda-down {
+/* MOVE DOWN */
+
+.mover-1-down-animacion {
+   animation: mover-1-down 120ms;
+}
+@keyframes mover-1-down {
    from {
-      transform: translateY(-100%);
+      transform: translateY(-111%);
    }
    to {
       transform: translateY(0);
    }
 }
-.mover-celda-left-animacion {
-   animation: mover-celda-left 150ms;
+.mover-2-down-animacion {
+   animation: mover-2-down 120ms;
+}
+@keyframes mover-2-down {
+   from {
+      transform: translateY(-222%);
+   }
+   to {
+      transform: translateY(0);
+   }
+}
+.mover-3-down-animacion {
+   animation: mover-3-down 120ms;
+}
+@keyframes mover-3-down {
+   from {
+      transform: translateY(-333%);
+   }
+   to {
+      transform: translateY(0);
+   }
 }
 
-@keyframes mover-celda-left {
+/* MOVE LEFT */
+
+.mover-1-left-animacion {
+   animation: mover-1-left 120ms;
+}
+@keyframes mover-1-left {
    from {
-      transform: translateX(100%);
+      transform: translateX(111%);
+   }
+   to {
+      transform: translateX(0);
+   }
+}
+.mover-2-left-animacion {
+   animation: mover-2-left 120ms;
+}
+@keyframes mover-2-left {
+   from {
+      transform: translateX(222%);
+   }
+   to {
+      transform: translateX(0);
+   }
+}
+.mover-3-left-animacion {
+   animation: mover-3-left 120ms;
+}
+@keyframes mover-3-left {
+   from {
+      transform: translateX(333%);
    }
    to {
       transform: translateX(0);
@@ -213,11 +307,11 @@ main {
 }
 
 /* FUSION & MOVIMIENTOS DE FUSION */
-.fusionar-celda-animacion {
-   animation: fusionar-celda 250ms;
+.fusion-celda-animacion {
+   animation: fusion-celda 250ms;
 }
 
-@keyframes fusionar-celda {
+@keyframes fusion-celda {
    0%, 100% {
       scale: 1;
    }
@@ -226,40 +320,40 @@ main {
    }
 }
 
-.fusion-mover-celda-up-animacion {
-   animation: fusion-mover-celda-up 150ms;
+.move-up-to-fusion-animacion {
+   animation: move-up-to-fusion 60ms forwards;
 }
 
-@keyframes fusion-mover-celda-up {
+@keyframes move-up-to-fusion {
    to {
-      transform: translateY(-100%);
+      transform: translateY(-50%);
    }
 }
-.fusion-mover-celda-right-animacion {
-   animation: fusion-mover-celda-right 150ms;
+.move-right-to-fusion-animacion {
+   animation: move-right-to-fusion 60ms forwards;
 }
 
-@keyframes fusion-mover-celda-right {
+@keyframes move-right-to-fusion {
    to {
-      transform: translateX(100%);
+      transform: translateX(50%);
    }
 }
-.fusion-mover-celda-down-animacion {
-   animation: fusion-mover-celda-down 150ms;
+.move-down-to-fusion-animacion {
+   animation: move-down-to-fusion 60ms forwards;
 }
 
-@keyframes fusion-mover-celda-down {
+@keyframes move-down-to-fusion {
    to {
-      transform: translateY(100%);
+      transform: translateY(50%);
    }
 }
-.fusion-mover-celda-left-animacion {
-   animation: fusion-mover-celda-left 150ms;
+.move-left-to-fusion-animacion {
+   animation: move-left-to-fusion 60ms forwards;
 }
 
-@keyframes fusion-mover-celda-left {
+@keyframes move-left-to-fusion {
    to {
-      transform: translateX(-100%);
+      transform: translateX(-50%);
    }
 }
 
@@ -320,8 +414,8 @@ main {
    #tablero {
       height: 500px;
       width: 500px;
-      padding: 10px;
-      gap: 10px;
+      padding: 12px;
+      gap: 12px;
    }
 
    .celda {
