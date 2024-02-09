@@ -1,10 +1,24 @@
 let puntos = 0;
+const setPuntos = () => {
+   document.getElementById("puntos").innerText = +puntos;
+};
 
 function iniciarJuego() {
    // Vaciamos el tablero y generamos 2 celdas.
    vaciarTablero();
    for (let i = 0; i < 2; i++) {
       generarCelda();
+   }
+}
+
+function cargarAnteriorJuego() {
+   if (localStorage.getItem("anteriorJuego") !== null) {
+      document.getElementById("tablero").innerHTML =
+         localStorage.getItem("anteriorJuego");
+      puntos = +localStorage.getItem("puntos");
+      setPuntos();
+   } else {
+      iniciarJuego();
    }
 }
 
@@ -16,8 +30,8 @@ function vaciarTablero() {
       }
    }
    // Establece los puntos a 0.
-   puntos = 0
-   document.getElementById("puntos").innerText = puntos;
+   puntos = 0;
+   setPuntos();
 }
 
 function comprobarDerrota() {
@@ -117,7 +131,7 @@ function moverCelda(celda, posicion, dir, mov) {
 }
 
 function fusionarCeldas(celda, posicion, mov) {
-   // PREVENCIÓN DE ERROR. Si la celda con la que se esta comparando tiene la siguiente clase. 
+   // PREVENCIÓN DE ERROR. Si la celda con la que se esta comparando tiene la siguiente clase.
    // Significa que esta en proceso de fusión con otra.
    if (posicion.classList.contains("move-" + mov + "-to-fusion-animacion")) {
       return;
@@ -142,7 +156,7 @@ function fusionarCeldas(celda, posicion, mov) {
 
    // Actualiza la puntuación.
    puntos += valor;
-   document.getElementById("puntos").innerText = puntos;
+   setPuntos();
 }
 
 /***************************************************************************************/
@@ -544,17 +558,23 @@ async function moveLeft() {
 }
 
 /* EVENTO LISTENER PARA CONTROLAR LOS MOVIMIENTOS POR TECLADO */
-document.addEventListener("keydown", function (event) {
+document.addEventListener("keydown", async function (event) {
    if (event.key == "ArrowUp") {
-      moveUp();
+      await moveUp();
    }
    if (event.key == "ArrowRight") {
-      moveRight();
+      await moveRight();
    }
    if (event.key == "ArrowDown") {
-      moveDown();
+      await moveDown();
    }
    if (event.key == "ArrowLeft") {
-      moveLeft();
+      await moveLeft();
    }
+   // Guarda en el localStorage tanto el tablero como los puntos.
+   localStorage.setItem(
+      "anteriorJuego",
+      document.getElementById("tablero").innerHTML
+   );
+   localStorage.setItem("puntos", +puntos);
 });
