@@ -38,7 +38,23 @@
             <div id="x2y3" class="celda"></div>
             <div id="x3y3" class="celda"></div>
          </section>
+         <!-- Modal para mostrar información sobre como se juega. -->
+         <dialog id="modalComoJugar" open>
+            <h2>¿Como Jugar?</h2>
+            <img src="assets/arrows.png" class="arrows">
+            <p>
+               Usa las flechas para mover las celdas. 
+            </p>
+            <p>
+            Cuando el valor de dos
+               celdas coincidan, se fusionarán sumando ambos valores.
+            </p>
+            <button onclick="cerrarModal()">
+               Aceptar
+            </button>
+         </dialog>
       </main>
+      <script src="assets/modal.js"></script>
       <script src="main.js"></script>
    </body>
 </html>

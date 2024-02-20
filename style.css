@@ -19,6 +19,56 @@ main {
    place-items: center;
 }
 
+/* Modal de como jugar */
+dialog {
+   position: absolute;
+   top: 50%;
+   transform: translateY(-50%);
+   
+   width: 40%;
+   padding: 30px;
+   background-color: #50423e;
+   border: 5px solid #776e65;
+   border-radius: 12px;
+
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+   text-align: center;
+}
+
+dialog:focus-visible {
+   outline: 0;
+}
+
+dialog .arrows {
+   width: 80px;
+   margin-bottom: 0;
+}
+
+dialog p {
+   margin-top: 0;
+}
+
+dialog button {   
+   margin-top: 20px;
+   padding: 12px 30px;
+   border: 2px solid #776e65;
+   border-radius: 12px;
+
+   background-color: #cdc1b4;
+   color: #50423e;
+
+   transition: all 700ms;
+}
+
+dialog button:hover {
+   cursor: pointer;
+   background-color: #776e65;
+   transition: all 300ms;
+}
+
 #hero {
    width: 800px;
    display: flex;
