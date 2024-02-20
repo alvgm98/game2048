@@ -25,12 +25,14 @@ dialog {
    top: 50%;
    transform: translateY(-50%);
    
-   width: 40%;
    padding: 30px;
    background-color: #50423e;
    border: 5px solid #776e65;
    border-radius: 12px;
+   z-index: 10;
+}
 
+dialog article {
    display: flex;
    flex-direction: column;
    justify-content: center;
@@ -38,7 +40,8 @@ dialog {
    text-align: center;
 }
 
-dialog:focus-visible {
+dialog:focus-visible,
+button:focus-visible {
    outline: 0;
 }
 
@@ -49,6 +52,7 @@ dialog .arrows {
 
 dialog p {
    margin-top: 0;
+   width: 85%;
 }
 
 dialog button {   
@@ -58,15 +62,41 @@ dialog button {
    border-radius: 12px;
 
    background-color: #cdc1b4;
-   color: #50423e;
+   color: #776e65;
+   font-size: 18px;
+   font-weight: bolder;
 
    transition: all 700ms;
 }
 
 dialog button:hover {
    cursor: pointer;
-   background-color: #776e65;
+   background-color: #ddd5cb;
    transition: all 300ms;
+}
+
+/* CLASE CERRAR EL MODAL */
+.fade-out-animation {
+   animation: fade-out 800ms forwards;
+}
+
+@keyframes fade-out {
+   to {
+      opacity: 0;
+      display: none;
+   }
+}
+
+/* OVERLAY OSCURO CUANDO UN MODAL SE ENCUENTRA ABIERTO */
+#overlay-oscuro {
+   display: none;
+   position: fixed; /* Hace falta fijar su posicion, si no al no tener contenido el div, no funciona. */
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100%;
+   background-color: rgba(0, 0, 0, 0.5);
+   z-index: 9; 
 }
 
 #hero {

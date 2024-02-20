@@ -39,20 +39,29 @@
             <div id="x3y3" class="celda"></div>
          </section>
          <!-- Modal para mostrar información sobre como se juega. -->
-         <dialog id="modalComoJugar" open>
-            <h2>¿Como Jugar?</h2>
-            <img src="assets/arrows.png" class="arrows">
-            <p>
-               Usa las flechas para mover las celdas. 
-            </p>
-            <p>
-            Cuando el valor de dos
-               celdas coincidan, se fusionarán sumando ambos valores.
-            </p>
-            <button onclick="cerrarModal()">
-               Aceptar
-            </button>
+         <dialog id="modalComoJugar">
+            <article>
+               <h2>¿Como Jugar?</h2>
+               <img src="assets/arrows.png" class="arrows" />
+               <p>Usa las flechas para mover las celdas.</p>
+               <p>
+                  <strong>Objetivo:</strong><br />
+                  Cuando el valor de dos celdas coincidan, se fusionarán sumando
+                  ambos valores.<br />
+                  El objetivo es llegar a 2048 (o más... &#128540;)
+               </p>
+               <p>
+                  <strong>Reglas:</strong><br />
+                  En cada movimiento, se moveran y fusionaran todas las celdas
+                  en la direccion indicada<br />
+                  Si no quedan movimientos posibles <strong>GAME OVER!</strong>
+               </p>
+               <button onclick="cerrarModal()">Aceptar</button>
+            </article>
          </dialog>
+
+         <!-- FONDO OSCURO CUANDO UN MODAL SE ECUENTRA ABIERTO -->
+         <div id="overlay-oscuro"></div>
       </main>
       <script src="assets/modal.js"></script>
       <script src="main.js"></script>
