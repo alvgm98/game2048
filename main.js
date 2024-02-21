@@ -43,7 +43,42 @@ function comprobarDerrota() {
          }
       }
    }
-   // TODO. pantalla de derrota.
+
+   // Comprobamos si existe alguna fusión disponible.
+   for (let y = 0; y < 4; y++) {
+      for (let x = 0; x < 4; x++) {
+         if (
+            document.getElementById("x" + (x + 1) + "y" + y) != null &&
+            document.getElementById("x" + x + "y" + y).innerText ==
+               document.getElementById("x" + (x + 1) + "y" + y).innerText
+         ) {
+            return false;
+         }
+         if (
+            document.getElementById("x" + (x - 1) + "y" + y) != null &&
+            document.getElementById("x" + x + "y" + y).innerText ==
+               document.getElementById("x" + (x - 1) + "y" + y).innerText
+         ) {
+            return false;
+         }
+         if (
+            document.getElementById("x" + x + "y" + (y + 1)) != null &&
+            document.getElementById("x" + x + "y" + y).innerText ==
+               document.getElementById("x" + x + "y" + (y + 1)).innerText
+         ) {
+            return false;
+         }
+         if (
+            document.getElementById("x" + x + "y" + (y - 1)) != null &&
+            document.getElementById("x" + x + "y" + y).innerText ==
+               document.getElementById("x" + x + "y" + (y - 1)).innerText
+         ) {
+            return false;
+         }
+      }
+   }
+
+   showModal("Derrota");
    return true;
 }
 
@@ -269,6 +304,8 @@ async function moveUp() {
    /*** *** GENERAR CELDA. *** ***/
    if (movimientoValido) {
       generarCelda();
+   } else {
+      comprobarDerrota();
    }
 }
 
@@ -364,6 +401,8 @@ async function moveRight() {
    // GENERAR CELDA
    if (movimientoValido) {
       generarCelda();
+   } else {
+      comprobarDerrota();
    }
 }
 
@@ -459,6 +498,8 @@ async function moveDown() {
    /*** *** GENERAR CELDA. *** ***/
    if (movimientoValido) {
       generarCelda();
+   } else {
+      comprobarDerrota();
    }
 }
 
@@ -554,6 +595,8 @@ async function moveLeft() {
    // GENERAR CELDA
    if (movimientoValido) {
       generarCelda();
+   } else {
+      comprobarDerrota();
    }
 }
 

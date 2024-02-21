@@ -10,9 +10,8 @@ function cerrarModal(id) {
    setTimeout(() => document.getElementById(id).close(), 500);
 }
 
-function showModalDerrota() {
-   document.getElementById("modalDerrota").classList.add("fade-in-animation")
-   document.getElementById("puntosDerrota").innerText = puntos;
-   setTimeout(() => document.getElementById("modalDerrota").show(), 500);
+function showModal(typeEndGame) {
+   document.getElementById("modal" + typeEndGame).classList.add("fade-in-animation");
+   document.getElementById("puntos" + typeEndGame).innerText = puntos;
+   setTimeout(() => document.getElementById("modal" + typeEndGame).show(), 500);
 }
- 
