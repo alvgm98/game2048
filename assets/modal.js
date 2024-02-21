@@ -7,5 +7,5 @@ function cerrarModal() {
       .getElementById("overlay-oscuro")
       .classList.add("fade-out-animation");
 
-   setTimeout(() => document.getElementById("modalComoJugar").close(), 800);
+   setTimeout(() => document.getElementById("modalComoJugar").close(), 500);
 }
