@@ -24,7 +24,7 @@ dialog {
    position: absolute;
    top: 50%;
    transform: translateY(-50%);
-   
+
    padding: 30px;
    background-color: #50423e;
    border: 5px solid #776e65;
@@ -55,7 +55,7 @@ dialog p {
    width: 85%;
 }
 
-dialog button {   
+dialog button {
    margin-top: 20px;
    padding: 12px 30px;
    border: 2px solid #776e65;
@@ -87,6 +87,21 @@ dialog button:hover {
    }
 }
 
+.fade-in-animation {
+   animation: fade-in 500ms forwards;
+}
+/* CLASE MOSTRAR MODAL */
+@keyframes fade-in {
+   from {
+      opacity: 0;
+      display: none;
+   }
+   to {
+      opacity: 1;
+      display: initial;
+   }
+}
+
 /* OVERLAY OSCURO CUANDO UN MODAL SE ENCUENTRA ABIERTO */
 #overlay-oscuro {
    display: none;
@@ -96,7 +111,7 @@ dialog button:hover {
    width: 100%;
    height: 100%;
    background-color: rgba(0, 0, 0, 0.5);
-   z-index: 9; 
+   z-index: 9;
 }
 
 #hero {
@@ -392,7 +407,8 @@ dialog button:hover {
 }
 
 @keyframes fusion-celda {
-   0%, 100% {
+   0%,
+   100% {
       scale: 1;
    }
    50% {
@@ -539,7 +555,7 @@ dialog button:hover {
    #hero #hero-right h3 {
       font-size: 20px;
    }
-   
+
    #tablero {
       height: 400px;
       width: 400px;

@@ -9,7 +9,11 @@
       />
       <title>2048</title>
       <link rel="stylesheet" href="style.css" />
-      <link rel="shortcut icon" href="assets/img/logo.png" type="image/x-icon" />
+      <link
+         rel="shortcut icon"
+         href="assets/img/logo.png"
+         type="image/x-icon"
+      />
    </head>
    <body onload="cargarAnteriorJuego()">
       <main>
@@ -56,10 +60,20 @@
                   en la direccion indicada<br />
                   Si no quedan movimientos posibles <strong>GAME OVER!</strong>
                </p>
-               <button onclick="cerrarModal()">Aceptar</button>
+               <button onclick="cerrarModal('modalComoJugar')">Aceptar</button>
             </article>
          </dialog>
 
+         <dialog id="modalDerrota">
+            <article>
+               <h2>GAME OVER!</h2>
+               <p>No quedan movimientos disponibles</p>
+               <p>Puntos: <strong id="puntosDerrota">0</strong></p>
+               <button onclick="cerrarModal('modalDerrota'); ">
+                  Volver a Jugar
+               </button>
+            </article>
+         </dialog>
          <!-- FONDO OSCURO CUANDO UN MODAL SE ECUENTRA ABIERTO -->
          <div id="overlay-oscuro"></div>
       </main>
