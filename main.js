@@ -196,6 +196,11 @@ function fusionarCeldas(celda, posicion, mov) {
    // Actualiza la puntuación.
    puntos += valor;
    setPuntos();
+
+   // Si la fusión es de 2048 muestra la pantalla de victoria.
+   if (valor == 2048) {
+      showModal("Victoria");
+   }
 }
 
 /***************************************************************************************/

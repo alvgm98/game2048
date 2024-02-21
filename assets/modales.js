@@ -11,7 +11,11 @@ function cerrarModal(id) {
 }
 
 function showModal(typeEndGame) {
-   document.getElementById("modal" + typeEndGame).classList.add("fade-in-animation");
+   // Muestra el modal con sus puntos.
+   document
+      .getElementById("modal" + typeEndGame)
+      .classList.add("fade-in-animation");
    document.getElementById("puntos" + typeEndGame).innerText = puntos;
+
    setTimeout(() => document.getElementById("modal" + typeEndGame).show(), 500);
 }

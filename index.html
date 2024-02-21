@@ -64,12 +64,28 @@
             </article>
          </dialog>
 
+         <!-- Modal Derrota -->
          <dialog id="modalDerrota">
             <article>
                <h2>GAME OVER!</h2>
                <p>No quedan movimientos disponibles</p>
                <p>Puntos: <strong id="puntosDerrota">0</strong></p>
                <button onclick="cerrarModal('modalDerrota'); iniciarJuego()">
+                  Volver a Jugar
+               </button>
+            </article>
+         </dialog>
+         <!-- Modal Victoria -->
+         <dialog id="modalVictoria">
+            <article>
+               <h2>Lo Conseguiste!</h2>
+               <p>
+                  Llegaste a <strong>2048!</strong> y con la friolera de
+                  <strong id="puntosVictoria">0</strong> puntos. <br>
+                  Te pasaste el juego... o no &#128540;...
+               </p>
+               <p>Si lo deseas puedes seguir jugando, tienes la posibilidad de llegar a 4096... 8192... te atreves?</p>
+               <button onclick="cerrarModal('modalVictoria')">
                   Volver a Jugar
                </button>
             </article>
