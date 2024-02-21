@@ -47,6 +47,7 @@ function comprobarDerrota() {
    // Comprobamos si existe alguna fusión disponible.
    for (let y = 0; y < 4; y++) {
       for (let x = 0; x < 4; x++) {
+         // RIGHT
          if (
             document.getElementById("x" + (x + 1) + "y" + y) != null &&
             document.getElementById("x" + x + "y" + y).innerText ==
@@ -54,6 +55,7 @@ function comprobarDerrota() {
          ) {
             return false;
          }
+         // LEFT
          if (
             document.getElementById("x" + (x - 1) + "y" + y) != null &&
             document.getElementById("x" + x + "y" + y).innerText ==
@@ -61,6 +63,7 @@ function comprobarDerrota() {
          ) {
             return false;
          }
+         // DOWN
          if (
             document.getElementById("x" + x + "y" + (y + 1)) != null &&
             document.getElementById("x" + x + "y" + y).innerText ==
@@ -68,6 +71,7 @@ function comprobarDerrota() {
          ) {
             return false;
          }
+         // UP
          if (
             document.getElementById("x" + x + "y" + (y - 1)) != null &&
             document.getElementById("x" + x + "y" + y).innerText ==
