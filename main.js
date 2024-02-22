@@ -35,7 +35,7 @@ function vaciarTablero() {
 }
 
 function comprobarDerrota() {
-   // Comprobamos si existe alguna celda vacía.
+   /* COMPRUEBA SI EXISTE ALGUNA CELDA VACÍA */
    for (let y = 0; y < 4; y++) {
       for (let x = 0; x < 4; x++) {
          if (document.getElementById("x" + x + "y" + y).innerText == "") {
@@ -44,38 +44,25 @@ function comprobarDerrota() {
       }
    }
 
-   // Comprobamos si existe alguna fusión disponible.
+   /* COMPRUEBA SI EXISTE ALGUNA FUSION DISPONIBLE */
+   // HORIZONTAL
    for (let y = 0; y < 4; y++) {
+      for (let x = 1; x < 4; x++) {
+         if (
+            document.getElementById("x" + x + "y" + y).innerText ==
+            document.getElementById("x" + (x - 1) + "y" + y).innerText
+         ) {
+            return false;
+         }
+      }
+   }
+
+   // VERTICAL
+   for (let y = 1; y < 3; y++) {
       for (let x = 0; x < 4; x++) {
-         // RIGHT
          if (
-            document.getElementById("x" + (x + 1) + "y" + y) != null &&
             document.getElementById("x" + x + "y" + y).innerText ==
-               document.getElementById("x" + (x + 1) + "y" + y).innerText
-         ) {
-            return false;
-         }
-         // LEFT
-         if (
-            document.getElementById("x" + (x - 1) + "y" + y) != null &&
-            document.getElementById("x" + x + "y" + y).innerText ==
-               document.getElementById("x" + (x - 1) + "y" + y).innerText
-         ) {
-            return false;
-         }
-         // DOWN
-         if (
-            document.getElementById("x" + x + "y" + (y + 1)) != null &&
-            document.getElementById("x" + x + "y" + y).innerText ==
-               document.getElementById("x" + x + "y" + (y + 1)).innerText
-         ) {
-            return false;
-         }
-         // UP
-         if (
-            document.getElementById("x" + x + "y" + (y - 1)) != null &&
-            document.getElementById("x" + x + "y" + y).innerText ==
-               document.getElementById("x" + x + "y" + (y - 1)).innerText
+            document.getElementById("x" + x + "y" + (y - 1)).innerText
          ) {
             return false;
          }
@@ -83,7 +70,7 @@ function comprobarDerrota() {
    }
 
    showModal("Derrota");
-   document.getElementById("derrota_audio").play()
+   document.getElementById("derrota_audio").play();
    return true;
 }
 
@@ -201,7 +188,7 @@ function fusionarCeldas(celda, posicion, mov) {
    // Si la fusión es de 2048 muestra la pantalla de victoria.
    if (valor == 2048) {
       showModal("Victoria");
-      document.getElementById("victoria_audio").play()
+      document.getElementById("victoria_audio").play();
    }
 }
 
