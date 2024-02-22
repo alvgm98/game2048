@@ -242,6 +242,18 @@ dialog button:hover {
    box-shadow: 0 0 30px 10px #f3d7748e;
 }
 
+.celda-4096 {
+   font-size: 60px;
+   background: #dca716;
+   box-shadow: 0 0 30px 10px #edbc328e;
+}
+
+.celda-8192 {
+   font-size: 60px;
+   background: #be8210;
+   box-shadow: 0 0 30px 10px #e69d1a8e;
+}
+
 /*** *** ANIMACIONES *** ***/
 
 /* MOVE UP */
@@ -481,7 +493,9 @@ dialog button:hover {
    }
 
    .celda-1024,
-   .celda-2048 {
+   .celda-2048,
+   .celda-4096,
+   .celda-8192 {
       font-size: 50px;
    }
 }
@@ -517,7 +531,9 @@ dialog button:hover {
    }
 
    .celda-1024,
-   .celda-2048 {
+   .celda-2048,
+   .celda-4096,
+   .celda-8192 {
       font-size: 35px;
    }
 }
@@ -557,7 +573,9 @@ dialog button:hover {
    }
 
    .celda-1024,
-   .celda-2048 {
+   .celda-2048,
+   .celda-4096,
+   .celda-8192 {
       font-size: 28px;
    }
 }
@@ -598,7 +616,9 @@ dialog button:hover {
    }
 
    .celda-1024,
-   .celda-2048 {
+   .celda-2048,
+   .celda-4096,
+   .celda-8192 {
       font-size: 25px;
    }
 }
@@ -638,7 +658,9 @@ dialog button:hover {
    }
 
    .celda-1024,
-   .celda-2048 {
+   .celda-2048,
+   .celda-4096,
+   .celda-8192 {
       font-size: 20px;
    }
 }
