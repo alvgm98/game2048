@@ -25,6 +25,7 @@ dialog {
    top: 50%;
    transform: translateY(-50%);
 
+   max-width: 70%;
    padding: 30px;
    background-color: #50423e;
    border: 5px solid #776e65;
@@ -473,22 +474,13 @@ dialog button:hover {
       font-size: 60px;
    }
 
-   .celda-128 {
-      font-size: 55px;
-   }
-
-   .celda-256 {
-      font-size: 55px;
-   }
-
+   .celda-128,
+   .celda-256,
    .celda-512 {
       font-size: 55px;
    }
 
-   .celda-1024 {
-      font-size: 50px;
-   }
-
+   .celda-1024,
    .celda-2048 {
       font-size: 50px;
    }
@@ -518,22 +510,13 @@ dialog button:hover {
       font-size: 45px;
    }
 
-   .celda-128 {
-      font-size: 40px;
-   }
-
-   .celda-256 {
-      font-size: 40px;
-   }
-
+   .celda-128,
+   .celda-256,
    .celda-512 {
       font-size: 40px;
    }
 
-   .celda-1024 {
-      font-size: 35px;
-   }
-
+   .celda-1024,
    .celda-2048 {
       font-size: 35px;
    }
@@ -567,23 +550,95 @@ dialog button:hover {
       font-size: 40px;
    }
 
-   .celda-128 {
-      font-size: 35px;
-   }
-
-   .celda-256 {
-      font-size: 35px;
-   }
-
+   .celda-128,
+   .celda-256,
    .celda-512 {
       font-size: 35px;
    }
 
-   .celda-1024 {
-      font-size: 28px;
-   }
-
+   .celda-1024,
    .celda-2048 {
       font-size: 28px;
+   }
+}
+
+@media (width < 450px) {
+   dialog {
+      font-size: 12px;
+      padding: 20px;
+   }
+
+   #hero {
+      width: 320px;
+   }
+
+   #hero h1 {
+      font-size: 60px;
+   }
+
+   #hero #hero-right button {
+      font-size: 13px;
+   }
+
+   #tablero {
+      height: 320px;
+      width: 320px;
+      padding: 8px;
+      gap: 8px;
+   }
+
+   .celda {
+      font-size: 35px;
+   }
+
+   .celda-128,
+   .celda-256,
+   .celda-512 {
+      font-size: 30px;
+   }
+
+   .celda-1024,
+   .celda-2048 {
+      font-size: 25px;
+   }
+}
+
+@media (width < 350px) {
+   #hero {
+      width: 250px;
+   }
+
+   #hero h1 {
+      font-size: 55px;
+   }
+
+   #hero #hero-right button {
+      font-size: 10px;
+   }
+
+   #hero #hero-right h3 {
+      font-size: 15px;
+   }
+
+   #tablero {
+      height: 280px;
+      width: 280px;
+      padding: 6px;
+      gap: 6px;
+   }
+
+   .celda {
+      font-size: 30px;
+   }
+
+   .celda-128,
+   .celda-256,
+   .celda-512 {
+      font-size: 25px;
+   }
+
+   .celda-1024,
+   .celda-2048 {
+      font-size: 20px;
    }
 }
