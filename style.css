@@ -654,8 +654,7 @@ dialog button:hover {
 
 @media (orientation: portrait) {
    #teclasMovimiento {
-      margin-top: 30px;
-      
+      flex: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -663,12 +662,11 @@ dialog button:hover {
    }
 
    #teclasMovimiento img {
+      margin-top: 2%;
       width: 22%;
    }
 
    #teclasMovimiento div {
-      margin-top: 2%;
-      
       display: flex;
       justify-content: center;
       gap: 2%;
