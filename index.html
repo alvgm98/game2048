@@ -42,6 +42,14 @@
             <div id="x2y3" class="celda"></div>
             <div id="x3y3" class="celda"></div>
          </section>
+         <section id="teclasMovimiento">
+            <img src="assets/img/arrow_up.png" onclick="moveUp()" />
+            <div>
+               <img src="assets/img/arrow_left.png" onclick="moveLeft()" />
+               <img src="assets/img/arrow_down.png" onclick="moveDown()" />
+               <img src="assets/img/arrow_right.png" onclick="moveRight()" />
+            </div>
+         </section>
          <!-- Modal para mostrar información sobre como se juega. -->
          <dialog id="modalComoJugar">
             <article>
@@ -81,10 +89,13 @@
                <h2>Lo Conseguiste!</h2>
                <p>
                   Llegaste a <strong>2048!</strong> y con la friolera de
-                  <strong id="puntosVictoria">0</strong> puntos. <br>
+                  <strong id="puntosVictoria">0</strong> puntos. <br />
                   Te pasaste el juego... o no &#128540;...
                </p>
-               <p>Si lo deseas puedes seguir jugando, tienes la posibilidad de llegar a 4096... 8192... te atreves?</p>
+               <p>
+                  Si lo deseas puedes seguir jugando, tienes la posibilidad de
+                  llegar a 4096... 8192... te atreves?
+               </p>
                <button onclick="cerrarModal('modalVictoria')">
                   Volver a Jugar
                </button>

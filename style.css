@@ -642,3 +642,31 @@ dialog button:hover {
       font-size: 20px;
    }
 }
+
+/* FLECHAS PARA EL MOVIMIENTOE EN VERSION MOVIL */
+#teclasMovimiento {
+   display: none;
+}
+
+@media (orientation: portrait) {
+   #teclasMovimiento {
+      margin-top: 30px;
+      
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+   }
+
+   #teclasMovimiento img {
+      width: 22%;
+   }
+
+   #teclasMovimiento div {
+      margin-top: 2%;
+      
+      display: flex;
+      justify-content: center;
+      gap: 2%;
+   }
+}
