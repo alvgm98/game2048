@@ -648,6 +648,10 @@ dialog button:hover {
    display: none;
 }
 
+#teclasMovimiento img:active {
+   scale: 1.1;
+}
+
 @media (orientation: portrait) {
    #teclasMovimiento {
       margin-top: 30px;
