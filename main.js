@@ -83,6 +83,7 @@ function comprobarDerrota() {
    }
 
    showModal("Derrota");
+   document.getElementById("derrota_audio").play()
    return true;
 }
 
@@ -200,6 +201,7 @@ function fusionarCeldas(celda, posicion, mov) {
    // Si la fusión es de 2048 muestra la pantalla de victoria.
    if (valor == 2048) {
       showModal("Victoria");
+      document.getElementById("victoria_audio").play()
    }
 }
 

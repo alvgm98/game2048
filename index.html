@@ -97,12 +97,15 @@
                   llegar a 4096... 8192... te atreves?
                </p>
                <button onclick="cerrarModal('modalVictoria')">
-                  Volver a Jugar
+                  Seguir Jugando
                </button>
             </article>
          </dialog>
          <!-- FONDO OSCURO CUANDO UN MODAL SE ECUENTRA ABIERTO -->
          <div id="overlay-oscuro"></div>
+         <!-- SONIDOS DE VICTORIA Y DERROTA -->
+         <audio src="assets/audio/victoria_audio.mp3" id="victoria_audio"></audio>
+         <audio src="assets/audio/derrota_audio.mp3" id="derrota_audio"></audio>
       </main>
       <script src="assets/modales.js"></script>
       <script src="main.js"></script>
