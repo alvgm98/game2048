@@ -3,14 +3,15 @@ const setPuntos = () => {
    document.getElementById("puntos").innerText = +puntos;
 };
 
+// Vacia el tablero y genera 2 celdas para comenzar la partida.
 function iniciarJuego() {
-   // Vaciamos el tablero y generamos 2 celdas.
    vaciarTablero();
    for (let i = 0; i < 2; i++) {
       generarCelda();
    }
 }
 
+// Busca en el sessionStorage si hay una partida anterior sin terminar y la carga.
 function cargarAnteriorJuego() {
    if (localStorage.getItem("anteriorJuego") !== null) {
       document.getElementById("tablero").innerHTML =
@@ -22,11 +23,11 @@ function cargarAnteriorJuego() {
    }
 }
 
+// Vacía todas las celdas del tablero.
 function vaciarTablero() {
    for (let y = 0; y < 4; y++) {
       for (let x = 0; x < 4; x++) {
-         // Reset de todas las celdas del tablero.
-         resetCelda(document.getElementById("x" + x + "y" + y));
+         resetCelda(document.getElementById("x" + x + "y" + y)); // Reset de todas las celdas del tablero.
       }
    }
    // Establece los puntos a 0.
@@ -34,6 +35,12 @@ function vaciarTablero() {
    setPuntos();
 }
 
+/*
+ * Se ejecuta cada vez que vez que se genera una celda nueva.
+ * Se ejecuta cada vez que se ejecuta un movimiento no válido.
+ *
+ * -- Se considerará derrota cuando no exista ninguna celda libre NI ninguna fusión disponible --
+ */
 function comprobarDerrota() {
    /* COMPRUEBA SI EXISTE ALGUNA CELDA VACÍA */
    for (let y = 0; y < 4; y++) {
@@ -69,6 +76,7 @@ function comprobarDerrota() {
       }
    }
 
+   // Ejecuta la derrota al no pasar por los filtros.
    showModal("Derrota");
    document.getElementById("derrota_audio").play();
    return true;
@@ -84,6 +92,7 @@ const PROBABILIDADES_VALOR_CELDA = [
    { valor: 8, probabilidad: 0.08 },
 ];
 
+// Se ejecuta cada vez que se generá una celda. Devuelve el valor que esta tendrá dependiendo de las probabilidades de cada valor.
 const calcularValorCelda = () => {
    const calcValorCelda = Math.random();
 
@@ -97,7 +106,7 @@ const calcularValorCelda = () => {
 };
 
 async function generarCelda() {
-   await new Promise((resolve) => setTimeout(resolve, 150));
+   await new Promise((resolve) => setTimeout(resolve, 150)); // Genera una espera por si existe algún movimiento sin terminar.
    // Si no hay celdas disponibles termina el juego.
    if (comprobarDerrota()) {
       console.log(comprobarDerrota());
@@ -127,6 +136,7 @@ async function generarCelda() {
    } while (true);
 }
 
+// Reset del estilo y el valor de la celda.
 function resetCelda(celda) {
    celda.className = "celda";
    celda.innerText = "";
@@ -157,10 +167,18 @@ function moverCelda(celda, posicion, dir, mov) {
    resetCelda(celda);
 }
 
-function fusionarCeldas(celda, posicion, mov) {
-   // PREVENCIÓN DE ERROR. Si la celda con la que se esta comparando tiene la siguiente clase.
-   // Significa que esta en proceso de fusión con otra.
-   if (posicion.classList.contains("move-" + mov + "-to-fusion-animacion")) {
+/*
+ *  celda     ->  Celda que se mueve.
+ *  posicion  ->  Posicion a la que se mueve.
+ *  dir       ->  Dirección a la que se mueve ("up", "right", "down", "left").
+ */
+function fusionarCeldas(celda, posicion, dir) {
+   /*
+    * PREVENCIÓN DE ERROR:
+    * Si la celda con la que se esta comparando tiene la clase de fusión.
+    * Significa que esta en proceso de fusión con otra.
+    */
+   if (posicion.classList.contains("move-" + dir + "-to-fusion-animacion")) {
       return;
    }
 
@@ -168,7 +186,7 @@ function fusionarCeldas(celda, posicion, mov) {
    const valor = celda.innerText * 2;
 
    // Movimiento de la celda antes de resetearla.
-   celda.classList.add("move-" + mov + "-to-fusion-animacion");
+   celda.classList.add("move-" + dir + "-to-fusion-animacion");
 
    // Reset de la celda que deja libre.
    setTimeout(() => resetCelda(celda), 60);
